@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 mobs_exp = {}
 exp_hud_frame = {}
 exp_hud_xp = {}
+exp_hud_level = {}
 
 local path = minetest.get_modpath(minetest.get_current_modname())
 
