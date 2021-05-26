@@ -17,16 +17,21 @@ License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 --]]
 
-mobs_exp = {}
-exp_hud_frame = {}
-exp_hud_xp = {}
+local data = ...
 
-local path = minetest.get_modpath(minetest.get_current_modname())
+local storage = mobs_exp.lua_log_file.new(minetest.get_worldpath().."/mobs_exp.txt", {})
+storage:init()
+storage.root = storage.root or {}
+storage:rewrite()
 
+for k, v in pairs(storage.root) do
+	if type(k) == "string" and type(v) == "number" then
+		data.set(k, v)
+	else
+		minetest.log("warning", "Cannot load key of type \""..type(k).."\" for value of type \""..type(v).."\"")
+	end
+end
 
-local data = assert(loadfile(path .. "/data.lua"))()
-
-assert(loadfile(path .. "/modlib_persistence.lua"))()
-assert(loadfile(path .. "/storage.lua"))(data)
-assert(loadfile(path .. "/core.lua"))(data)
-assert(loadfile(path .. "/hud.lua"))(data)
+data.add_callback(function(name, oldval, newval)
+	storage:set_root(name, newval)
+end)
