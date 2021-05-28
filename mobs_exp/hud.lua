@@ -24,32 +24,35 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 local data = ...
 
+local hud_pos = {x = 0.5, y = 0.85}
+local hud_scale = {x = 5, y = 5}
+local hud_offset = {x = 45, y = 1.6}
 
 
 local xp_hud_frame = {
 	hud_elem_type = "image",
-	position = {x = 0.5, y = 0.9},
+	position = hud_pos,
 	offset = {x = 0, y = 0},
 	text = "bar_frame.png^[transformR90",
-	scale = {x = 5, y = 5},
+	scale = hud_scale,
 	alignment = {x = 0, y = 0},
 }
 
 local xp_hud_xp = {
 	hud_elem_type = "image",
-	position = {x = 0.5, y = 0.9},
+	position = hud_pos,
 	offset = {x = 0, y = 0},
 	text = "bar_xp.png^[transformR90",
-	scale = {x = 5, y = 5},
+	scale = hud_scale,
 	alignment = {x = 0, y = 0},
 }
 
 local xp_hud_lv = {
 	hud_elem_type = "image",
-	position = {x = 0.5, y = 0.5},
+	position = hud_pos,
 	offset = {x = 0, y = 0},
 	text = "",
-	scale = {x = 5, y = 5},
+	scale = hud_scale,
 	alignment = {x = 0, y = 0},
 }
 
@@ -58,7 +61,7 @@ local xp_hud_lv = {
 function mobs_exp.set_hud_level(player, l)
 	local levelString = tostring(l)
 	local name = player:get_player_name()
-	local offset = 18
+	local width = -20
 
 	for h = 1, exp_hud_level[name].level_length, 1 do
 		if not exp_hud_level[name][h] then break end
@@ -69,7 +72,7 @@ function mobs_exp.set_hud_level(player, l)
 	for i = 1, #levelString, 1 do
 		exp_hud_level[name][i] = player:hud_add(xp_hud_lv)
 		player:hud_change(exp_hud_level[name][i], "text", levelString:sub(i, i) ..".png")
-		player:hud_change(exp_hud_level[name][i], "offset", {x = i * offset , y = 0})	
+		player:hud_change(exp_hud_level[name][i], "offset", {x = -(hud_offset.x*hud_scale.x + ((i-1)*width)), y = -(hud_offset.y*hud_scale.y)})
 	end
 
 	exp_hud_level[name].level_length = #levelString
